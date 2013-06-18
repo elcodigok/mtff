@@ -19,7 +19,11 @@ def main():
     )
     group1.add_option(
         "-f", "--file", dest="fileConfiguration",
-        help="**REQUIRED** - File configuration YAML.", metavar="FILE"
+        help="**REQUIRED** - File configuration YAML.", metavar="FILE",
+    )
+    group1.add_option(
+        "-o", "--output", dest="output",
+        help="Script firewall import RouterOS firewall.rsc", metavar="FILE",
     )
     parser.add_option_group(group1)
 
