@@ -40,4 +40,11 @@ class createFirewall():
             for i in self.values['interfaces'][inet]['services']['deny']:
                 for protocol in self.values['services'][i]:
                     print self.filter + "add chain=input in-interface=" + self.values['interfaces'][inet]['ip']['name'] + " src-address=" + self.values['interfaces'][inet]['ip']['network'] + "/" + self.values['interfaces'][inet]['ip']['netmask'] + " src-port=1024-65535 protocol=" + protocol + " dst-port=" + str(self.values['services'][i][protocol]) + " action=drop comment=\"Access denied to " + i + " - " + self.values['interfaces'][inet]['ip']['name'] + "\"\n"
-        
+
+    def createPolicy(self):
+        for inet in self.values['interfaces']:
+            for i in self.values['interfaces'][inet]['policy']:
+                print self.filter + "add chain=input in-interface=" + self.values['interfaces'][inet]['ip']['name'] + " action=" + self.values['interfaces'][inet]['policy'] + " comment=\"Default Policy to " + self.values['interfaces'][inet]['ip']['name'] + " - INPUT\"\n"
+                print self.filter + "add chain=forward in-interface=" + self.values['interfaces'][inet]['ip']['name'] + " action=" + self.values['interfaces'][inet]['policy'] + " comment=\"Default Policy to " + self.values['interfaces'][inet]['ip']['name'] + " - FORWARD\"\n"
+                print self.filter + "add chain=forward out-interface=" + self.values['interfaces'][inet]['ip']['name'] + " action=" + self.values['interfaces'][inet]['policy'] + " comment=\"Default Policy to " + self.values['interfaces'][inet]['ip']['name'] + " - FORWARD\"\n"
+                print self.filter + "add chain=output out-interface=" + self.values['interfaces'][inet]['ip']['name'] + " action=" + self.values['interfaces'][inet]['policy'] + " comment=\"Default Policy to " + self.values['interfaces'][inet]['ip']['name'] + " - OUTPUT\"\n"

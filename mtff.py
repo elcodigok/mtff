@@ -66,6 +66,7 @@ def main():
             print "seguimos bien"
             firewall = createFirewall(qwer.loadFile())
             firewall.createInput()
+            firewall.createPolicy()
         else:
             print "no paso la prueba"
     else:
