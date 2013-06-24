@@ -59,12 +59,14 @@ def main():
     
     asdf = inputFile(options.fileConfiguration)
     if asdf.existsFile():
-        print "buen parametro"
+        #print "buen parametro"
         qwer = processYaml(options.fileConfiguration)
         qwer.loadFile()
         if qwer.has_key('interfaces'):
-            print "seguimos bien"
+            #print "seguimos bien"
             firewall = createFirewall(qwer.loadFile())
+            firewall.createFirewallHeader()
+            firewall.deleteRules()
             firewall.createInput()
             firewall.createPolicy()
         else:

@@ -23,6 +23,7 @@ along with WPHardening.  If not, see <http://www.gnu.org/licenses/>.
 
 from lib.yaml import *
 from lib.processYaml import processYaml
+import datetime
 import os
 
 class createFirewall():
@@ -31,6 +32,22 @@ class createFirewall():
         self.nat = "/ip firewall nat "
         self.mangle = "/ip firewall mangle "
         self.values = values
+
+    def createFirewallHeader(self):
+        print "#"
+        print "# " + self.values['configuration']['product']
+        print "# Date: " + str(datetime.date.today())
+        print "# Author: " + self.values['configuration']['author']
+        print "# Comment: " + self.values['configuration']['comment']
+        print "#\n"
+
+    def deleteRules(self):
+        print "# Deleting all in NAT Rules."
+        print self.nat + "remove [" + self.nat + "find]\n"
+        print "# Deleting all in MANGLE Rules."
+        print self.mangle + "remove [" + self.mangle + "find]\n"
+        print "# Deleting all in FILTER Rules."
+        print self.filter + "remove [" + self.filter + "find]\n"
 
     def createInput(self):
         for inet in self.values['interfaces']:
@@ -43,8 +60,7 @@ class createFirewall():
 
     def createPolicy(self):
         for inet in self.values['interfaces']:
-            for i in self.values['interfaces'][inet]['policy']:
-                print self.filter + "add chain=input in-interface=" + self.values['interfaces'][inet]['ip']['name'] + " action=" + self.values['interfaces'][inet]['policy'] + " comment=\"Default Policy to " + self.values['interfaces'][inet]['ip']['name'] + " - INPUT\"\n"
-                print self.filter + "add chain=forward in-interface=" + self.values['interfaces'][inet]['ip']['name'] + " action=" + self.values['interfaces'][inet]['policy'] + " comment=\"Default Policy to " + self.values['interfaces'][inet]['ip']['name'] + " - FORWARD\"\n"
-                print self.filter + "add chain=forward out-interface=" + self.values['interfaces'][inet]['ip']['name'] + " action=" + self.values['interfaces'][inet]['policy'] + " comment=\"Default Policy to " + self.values['interfaces'][inet]['ip']['name'] + " - FORWARD\"\n"
-                print self.filter + "add chain=output out-interface=" + self.values['interfaces'][inet]['ip']['name'] + " action=" + self.values['interfaces'][inet]['policy'] + " comment=\"Default Policy to " + self.values['interfaces'][inet]['ip']['name'] + " - OUTPUT\"\n"
+            print self.filter + "add chain=input in-interface=" + self.values['interfaces'][inet]['ip']['name'] + " action=" + self.values['interfaces'][inet]['policy'] + " comment=\"Default Policy to " + self.values['interfaces'][inet]['ip']['name'] + " - INPUT\"\n"
+            print self.filter + "add chain=forward in-interface=" + self.values['interfaces'][inet]['ip']['name'] + " action=" + self.values['interfaces'][inet]['policy'] + " comment=\"Default Policy to " + self.values['interfaces'][inet]['ip']['name'] + " - FORWARD\"\n"
+            print self.filter + "add chain=forward out-interface=" + self.values['interfaces'][inet]['ip']['name'] + " action=" + self.values['interfaces'][inet]['policy'] + " comment=\"Default Policy to " + self.values['interfaces'][inet]['ip']['name'] + " - FORWARD\"\n"
+            print self.filter + "add chain=output out-interface=" + self.values['interfaces'][inet]['ip']['name'] + " action=" + self.values['interfaces'][inet]['policy'] + " comment=\"Default Policy to " + self.values['interfaces'][inet]['ip']['name'] + " - OUTPUT\"\n"
