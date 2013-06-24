@@ -72,6 +72,9 @@ class createFirewall():
             for i in self.values['router'][router]['services']['deny']:
                 for protocol in self.values['services'][i]:
                     print self.filter + "add chain=forward in-interface=" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['name'] + " src-address=" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['network'] + "/" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['netmask'] + " out-interface=" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['name'] + " dst-address=" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['network'] + "/" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['netmask'] + " src-port=1024-65535 protocol=" + protocol + " dst-port=" + str(self.values['services'][i][protocol]) +  " action=drop\n"
+                    
+            if 'options' in self.values['router'][router]:
+                print self.nat + "add chain=srcnat out-interface=" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['name'] + " action=" + self.values['router'][router]['options'] + " src-address=" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['network'] + "/" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['netmask'] + " comment=\"Configuration NAT for " + router + "\"\n"
 
     def createPolicy(self):
         for inet in self.values['interfaces']:
