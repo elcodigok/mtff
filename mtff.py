@@ -67,7 +67,9 @@ def main():
             firewall = createFirewall(qwer.loadFile())
             firewall.createFirewallHeader()
             firewall.deleteRules()
+            firewall.connectionTracking()
             firewall.createInput()
+            firewall.createRouter()
             firewall.createPolicy()
         else:
             print "no paso la prueba"

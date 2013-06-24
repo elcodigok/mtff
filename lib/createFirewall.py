@@ -49,6 +49,11 @@ class createFirewall():
         print "# Deleting all in FILTER Rules."
         print self.filter + "remove [" + self.filter + "find]\n"
 
+    def connectionTracking(self):
+        print "# Connection Tracking"
+        print "/ip firewall connection tracking"
+        print "set enabled=yes generic-timeout=10s icmp-timeout=10s tcp-close-timeout=10s tcp-close-wait-timeout=10s tcp-established-timeout=1d tcp-fin-wait-timeout=10s tcp-last-ack-timeout=10s tcp-syn-received-timeout=5s tcp-syn-sent-timeout=5s tcp-syncookie=no tcp-time-wait-timeout=10s udp-stream-timeout=3m udp-timeout=10s\n"
+
     def createInput(self):
         for inet in self.values['interfaces']:
             for i in self.values['interfaces'][inet]['services']['accept']:
@@ -57,6 +62,16 @@ class createFirewall():
             for i in self.values['interfaces'][inet]['services']['deny']:
                 for protocol in self.values['services'][i]:
                     print self.filter + "add chain=input in-interface=" + self.values['interfaces'][inet]['ip']['name'] + " src-address=" + self.values['interfaces'][inet]['ip']['network'] + "/" + self.values['interfaces'][inet]['ip']['netmask'] + " src-port=1024-65535 protocol=" + protocol + " dst-port=" + str(self.values['services'][i][protocol]) + " action=drop comment=\"Access denied to " + i + " - " + self.values['interfaces'][inet]['ip']['name'] + "\"\n"
+
+    def createRouter(self):
+        for router in self.values['router']:
+            print "# " + router
+            for i in self.values['router'][router]['services']['accept']:
+                for protocol in self.values['services'][i]:
+                    print self.filter + "add chain=forward in-interface=" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['name'] + " src-address=" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['network'] + "/" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['netmask'] + " out-interface=" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['name'] + " dst-address=" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['network'] + "/" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['netmask'] + " src-port=1024-65535 protocol=" + protocol + " dst-port=" + str(self.values['services'][i][protocol]) +  " action=accept\n"
+            for i in self.values['router'][router]['services']['deny']:
+                for protocol in self.values['services'][i]:
+                    print self.filter + "add chain=forward in-interface=" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['name'] + " src-address=" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['network'] + "/" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['netmask'] + " out-interface=" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['name'] + " dst-address=" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['network'] + "/" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['netmask'] + " src-port=1024-65535 protocol=" + protocol + " dst-port=" + str(self.values['services'][i][protocol]) +  " action=drop\n"
 
     def createPolicy(self):
         for inet in self.values['interfaces']:
