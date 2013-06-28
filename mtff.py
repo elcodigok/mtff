@@ -61,7 +61,6 @@ def main():
     if asdf.existsFile():
         qwer = processYaml(options.fileConfiguration)
         qwer.loadFile()
-        #if qwer.has_key('interfaces'):
         if qwer.isValid():
             firewall = createFirewall(qwer.loadFile())
             firewall.createFirewallHeader()
