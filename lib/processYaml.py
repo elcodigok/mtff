@@ -50,3 +50,36 @@ class processYaml():
 
     def getCopy(self):
         return self.fileYaml.copy()
+
+    def validationInterfaces(self):
+        if self.fileYaml.has_key('interfaces'):
+            return True
+        else:
+            return False
+
+    def validationConfigure(self):
+        if self.fileYaml.has_key('configuration'):
+            return True
+        else:
+            return False
+
+    def validationServices(self):
+        if self.fileYaml.has_key('services'):
+            return True
+        else:
+            return False
+
+    def isValid(self):
+        if self.validationConfigure():
+            if self.validationInterfaces():
+                if self.validationServices():
+                    return True
+                else:
+                    print "Error - In the file " + self.pathFile + " must especify the services."
+                    return False
+            else:
+                print "Error - In the file " + self.pathFile + " must especify the interfaces."
+                return False
+        else:
+            print "Error - In the file " + self.pathFile + " must especify the configuration."
+            return False
