@@ -22,19 +22,19 @@ along with WPHardening.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from lib.yaml import *
-from lib.yaml import Loader
 import os
+
 
 class processYaml():
     def __init__(self, pathFile):
         self.pathFile = pathFile
         self.fileYaml = None
-    
+
     def loadFile(self):
         yaml_file = open(os.path.abspath(self.pathFile), 'r')
         self.fileYaml = load(yaml_file)
         return self.fileYaml
-        
+
     def dumpFile(self):
         return dump(self.fileYaml)
 

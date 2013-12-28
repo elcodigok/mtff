@@ -23,7 +23,9 @@ along with WPHardening.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 
+
 class inputFile():
+
     def __init__(self, pathFile):
         self.pathFile = pathFile
 

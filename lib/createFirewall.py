@@ -24,9 +24,10 @@ along with WPHardening.  If not, see <http://www.gnu.org/licenses/>.
 from lib.yaml import *
 from lib.processYaml import processYaml
 import datetime
-import os
+
 
 class createFirewall():
+
     def __init__(self, values):
         self.filter = "/ip firewall filter "
         self.nat = "/ip firewall nat "
@@ -34,7 +35,7 @@ class createFirewall():
         self.values = values
 
     def createFirewallHeader(self):
-        print "#"
+        print("#")
         print "# " + self.values['configuration']['product']
         print "# Date: " + str(datetime.date.today())
         print "# Author: " + self.values['configuration']['author']
@@ -72,7 +73,7 @@ class createFirewall():
             for i in self.values['router'][router]['services']['deny']:
                 for protocol in self.values['services'][i]:
                     print self.filter + "add chain=forward in-interface=" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['name'] + " src-address=" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['network'] + "/" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['netmask'] + " out-interface=" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['name'] + " dst-address=" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['network'] + "/" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['netmask'] + " src-port=1024-65535 protocol=" + protocol + " dst-port=" + str(self.values['services'][i][protocol]) +  " action=drop comment=\"" + router + " - " + i + "\"\n"
-                    
+
             if 'options' in self.values['router'][router]:
                 print self.nat + "add chain=srcnat out-interface=" + self.values['interfaces'][self.values['router'][router]['outface']]['ip']['name'] + " action=" + self.values['router'][router]['options'] + " src-address=" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['network'] + "/" + self.values['interfaces'][self.values['router'][router]['inface']]['ip']['netmask'] + " comment=\"Configuration NAT for " + router + "\"\n"
 

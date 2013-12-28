@@ -21,12 +21,10 @@ along with WPHardening.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
-from optparse import OptionParser,OptionGroup
-from lib.yaml import load,dump
+from optparse import OptionParser, OptionGroup
 from lib.inputFile import inputFile
 from lib.processYaml import processYaml
 from lib.createFirewall import createFirewall
-import os
 import sys
 
 
@@ -35,7 +33,8 @@ def main():
     version = "MikroTik Firewall Framework version 0.1"
     parser = OptionParser(usage, version=version)
     parser.add_option(
-        "-v", "--verbose", action="store_true", dest="verbose", help="active verbose mode output results.",
+        "-v", "--verbose", action="store_true", dest="verbose",
+        help="active verbose mode output results.",
     )
     group1 = OptionGroup(
         parser, "Target",
@@ -56,7 +55,7 @@ def main():
     if options.fileConfiguration is None:
         parser.print_help()
         sys.exit()
-    
+
     asdf = inputFile(options.fileConfiguration)
     if asdf.existsFile():
         qwer = processYaml(options.fileConfiguration)
@@ -70,7 +69,7 @@ def main():
             firewall.createRouter()
             firewall.createPolicy()
     else:
-        print "mal parametro"
+        print("mal parametro")
         sys.exit()
 
 if __name__ == "__main__":
