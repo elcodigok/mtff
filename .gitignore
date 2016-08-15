@@ -34,5 +34,5 @@ nosetests.xml
 .pydevproject
 
 #
-.rsc
-.yaml
+*.rsc
+*.yaml
